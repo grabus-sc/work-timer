@@ -67,8 +67,9 @@ export function createProject({
   name,
   description,
   color,
-  userId
-}: Pick<Project, 'name' | 'description' | 'color'> & {
+  userId,
+  image
+}: Pick<Project, 'name' | 'description' | 'color' | 'image'> & {
   userId: User['id'];
 }) {
   return prisma.project.create({
@@ -76,7 +77,8 @@ export function createProject({
       name,
       description,
       color,
-      userId
+      userId,
+      image
     }
   });
 }

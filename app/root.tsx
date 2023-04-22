@@ -319,6 +319,7 @@ function Layout({ children }: React.PropsWithChildren<{}>) {
                   variant="light"
                   active={location.pathname.includes('/time-entries')}
                 />
+
                 <NavLink
                   component={Link}
                   to="/projects"
@@ -382,6 +383,19 @@ function Layout({ children }: React.PropsWithChildren<{}>) {
                   rightSection={<Badge variant="light">ADMIN</Badge>}
                   variant="light"
                   active={location.pathname.includes('/users')}
+                />
+                 <NavLink
+                  component={Link}
+                  to="/manage-projects"
+                  label="Manage Projects"
+                  icon={
+                    <ThemeIcon variant="light">
+                      <Briefcase size={16} />
+                    </ThemeIcon>
+                  }
+                  variant="light"
+                  rightSection={<Badge variant="light">ADMIN</Badge>}
+                  active={location.pathname.includes('/manage-projects')}
                 />
               </Navbar.Section>
             )}

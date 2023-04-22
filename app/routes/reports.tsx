@@ -61,7 +61,7 @@ export async function loader({ request }: LoaderArgs) {
 
 export default function ReportPage() {
   const data = useLoaderData<typeof loader>();
-  const reports = useFetcher<typeof loader>();
+  const reports = useFetcher<typeof loader>();  
 
   const [dateRange, setDateRange] = useState<DateRangePickerValue>([
     dayjs().startOf('month').startOf('day').toDate(),
