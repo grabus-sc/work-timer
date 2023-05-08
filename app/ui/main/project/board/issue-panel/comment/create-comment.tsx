@@ -1,13 +1,13 @@
 import { v4 as uuid } from "uuid";
-import { Comment } from "@domain/comment";
-import { useUserStore } from "@app/store/user.store";
-import { UserAvatar } from "@app/components/user-avatar";
+import { Comment } from "domain/comment";
+import { UserAvatar } from "app/components/user-avatar";
 import { EditBox } from "./edit-box";
+import { User } from "domain/user";
 
 export const CreateComment = ({
   addComment,
+  user,
 }: CreateCommentProps): JSX.Element => {
-  const { user } = useUserStore();
 
   const save = (message: string) => {
     addComment({
@@ -29,4 +29,5 @@ export const CreateComment = ({
 
 interface CreateCommentProps {
   addComment: (comment: Comment) => void;
+  user: User;
 }

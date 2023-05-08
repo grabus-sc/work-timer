@@ -1,6 +1,6 @@
 import { Link } from "@remix-run/react";
 import { IoCloseOutline } from "react-icons/io5";
-import { IssueId } from "@domain/issue";
+import { IssueId } from "domain/issue";
 
 export const PanelHeaderProject = ({
   id,

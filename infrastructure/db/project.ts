@@ -67,6 +67,8 @@ export const getProject = async (
     name: projectDb.name,
     description: projectDb.description || "",
     image: projectDb.image,
+    color: "#333",
+    userId: "",
     categories: projectDb.categories.map((category) => ({
       id: category.id,
       name: category.name,
@@ -95,6 +97,8 @@ interface GetProjectOptions {
 }
 
 export const getProjectSummary = async (projectId: ProjectId): Promise<ProjectSummary | null> => {
+  console.log(projectId);
+  
   const projectSummaryDb = await prisma.project.findUnique({
     where: { id: projectId },
     select: {

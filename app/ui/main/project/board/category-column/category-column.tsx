@@ -4,11 +4,11 @@ import { AiOutlinePlus } from "react-icons/ai";
 import { RxValueNone } from "react-icons/rx";
 import cx from "classix";
 import { useDrop } from "react-dnd";
-import { Category } from "@domain/category";
-import { Issue, IssueId } from "@domain/issue";
-import { ScrollArea } from "@app/components/scroll-area";
-import { useProjectStore } from "@app/ui/main/project";
-import { useSortBy } from "@app/hooks/useSortBy";
+import { Category } from "domain/category";
+import { Issue, IssueId } from "domain/issue";
+import { ScrollArea } from "app/components/scroll-area";
+import { useProjectStore } from "app/ui/main/project";
+import { useSortBy } from "app/hooks/useSortBy";
 import { IssueCard, DropItem, DRAG_ISSUE_CARD } from "./issue-card";
 
 export const CategoryColumn = (props: CategoryColumnProps): JSX.Element => {

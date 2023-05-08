@@ -37,7 +37,7 @@ export const meta: MetaFunction = () => {
     "twitter:image:width": "1297",
     "twitter:image:height": "635",
     "twitter:image:alt": title,
-    "twitter:creator": "@Jack_DanielSG",
+    "twitter:creator": "Jack_DanielSG",
     "twitter:creator:id": "Jack_DanielSG",
   };
 };

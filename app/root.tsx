@@ -65,6 +65,12 @@ import {
 } from 'react-feather';
 import { NotificationsProvider } from '@mantine/notifications';
 
+import stylesheet from "~/tailwind.css";
+
+export const links: LinksFunction = () => [
+  { rel: "stylesheet", href: stylesheet },
+];
+
 export const meta: MetaFunction = () => ({
   charset: 'utf-8',
   title: 'WorkTimer',
@@ -72,10 +78,6 @@ export const meta: MetaFunction = () => ({
     'WorkTimer is a time tracking app. Helps you track your time spent on projects.',
   viewport: 'width=device-width,initial-scale=1'
 });
-
-export let links: LinksFunction = () => {
-  return [];
-};
 
 export async function loader({ request }: LoaderArgs) {
   return json({

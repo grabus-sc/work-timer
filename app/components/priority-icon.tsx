@@ -1,6 +1,6 @@
 import cx from "classix";
 import { HiFlag } from "react-icons/hi";
-import { PriorityId } from "@domain/priority";
+import { PriorityId } from "domain/priority";
 
 export const PriorityIcon = ({
   priority,

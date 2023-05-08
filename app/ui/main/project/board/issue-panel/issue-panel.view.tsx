@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback } from 'react';
 import {
   Form,
   useActionData,
@@ -6,34 +6,33 @@ import {
   useSearchParams,
   useTransition,
   useLocation,
-  useNavigate,
-} from "@remix-run/react";
-import * as Dialog from "@radix-ui/react-dialog";
-import { cx } from "classix";
-import { CategoryType } from "@domain/category";
-import { Issue, defaultIssuesIds } from "@domain/issue";
-import { Comment, CommentId } from "@domain/comment";
-import { useUserStore } from "@app/store/user.store";
-import { ActionData as IssueActionData } from "@app/routes/__main/projects.$projectId/board/issue/$issueId";
-import { UserAvatar } from "@app/components/user-avatar";
-import { Title } from "@app/components/title";
-import { Description } from "@app/components/description";
-import { Kbd } from "@app/components/kbd-placeholder";
-import { formatDateTime } from "@utils/formatDateTime";
-import { PanelHeaderIssue } from "./panel-header-issue";
-import { CreateComment } from "./comment/create-comment";
-import { ViewComment } from "./comment/view-comment";
-import { SelectStatus } from "./select-status";
-import { SelectPriority } from "./select-priority";
-import { SelectAsignee } from "./select-asignee";
+  useNavigate
+} from '@remix-run/react';
+import * as Dialog from '@radix-ui/react-dialog';
+import { cx } from 'classix';
+import { CategoryType } from 'domain/category';
+import { Issue, defaultIssuesIds } from 'domain/issue';
+import { Comment, CommentId } from 'domain/comment';
+import { ActionData as IssueActionData } from 'app/routes/projects.$projectId/board/issue/$issueId';
+import { UserAvatar } from 'app/components/user-avatar';
+import { Title } from 'app/components/title';
+import { Description } from 'app/components/description';
+import { Kbd } from 'app/components/kbd-placeholder';
+import { formatDateTime } from 'utils/formatDateTime';
+import { PanelHeaderIssue } from './panel-header-issue';
+import { CreateComment } from './comment/create-comment';
+import { ViewComment } from './comment/view-comment';
+import { SelectStatus } from './select-status';
+import { SelectPriority } from './select-priority';
+import { SelectAsignee } from './select-asignee';
+import { User } from 'domain/user';
 
-export const IssuePanel = ({ issue }: Props): JSX.Element => {
+export const IssuePanel = ({ issue, user }: Props): JSX.Element => {
   const [isOpen, setIsOpen] = useState(true);
   const [comments, setComments] = useState<Comment[]>(issue?.comments || []);
   const [portalContainer, setPortalContainer] = useState<HTMLDivElement | null>(
     null
   );
-  const { user } = useUserStore();
   const reporter = issue ? issue.reporter : user;
   const formRef = useRef<HTMLFormElement>(null);
   const actionData = useActionData() as IssueActionData;
@@ -42,20 +41,21 @@ export const IssuePanel = ({ issue }: Props): JSX.Element => {
   const transition = useTransition();
   const location = useLocation();
   const navigate = useNavigate();
-  const initStatus = (params[0].get("category") as CategoryType) || "TODO";
+  const initStatus = (params[0].get('category') as CategoryType) || 'TODO';
   const userIsNotReporter = user.id !== reporter.id;
 
   const postData = useCallback(
     (formTarget: HTMLFormElement) => {
       const formData = new FormData(formTarget);
-      formData.set("comments", JSON.stringify(comments));
-      formData.set("_action", "upsert");
-
-      submit(formData, {
-        method: "post",
-      });
+      formData.set('comments', JSON.stringify(comments));
+      formData.set('_action', 'upsert');
+      console.log(formData);
+      
+      // submit(formData, {
+      //   method: 'post'
+      // });
     },
-    [comments, submit]
+    [comments]
   );
 
   const handleProgrammaticSubmit = useCallback((): void => {
@@ -63,10 +63,11 @@ export const IssuePanel = ({ issue }: Props): JSX.Element => {
       postData(formRef.current);
     }
   }, [postData]);
-
+  
   const onKeyDown = useCallback(
     (e: KeyboardEvent) => {
-      if (e.shiftKey && e.key.toLowerCase() === "s") {
+      
+      if (e.shiftKey && e.key.toLowerCase() === 's') {
         e.preventDefault();
         handleProgrammaticSubmit();
       }
@@ -93,166 +94,133 @@ export const IssuePanel = ({ issue }: Props): JSX.Element => {
     );
     setComments(updatedComments);
   };
-
+  
   useEffect(() => {
-    window.addEventListener("keydown", onKeyDown);
-
-    return () => window.removeEventListener("keydown", onKeyDown);
+    window.addEventListener('keydown', onKeyDown);
+    
+    return () => window.removeEventListener('keydown', onKeyDown);
   }, [onKeyDown]);
 
   useEffect(() => {
     if (!isOpen) {
       setTimeout(() => {
-        const previousUrl = location.pathname.split("/issue")[0];
+        const previousUrl = location.pathname.split('/issue')[0];
         navigate(previousUrl);
       }, 300);
     }
   }, [isOpen, navigate, location.pathname]);
 
   return (
-    <>
-      <Dialog.Root open={true}>
-        <Dialog.Portal container={portalContainer}>
-          <Dialog.Overlay
-            className={cx(
-              "absolute top-0 left-0 z-50 box-border grid h-full w-full place-items-center overflow-y-auto bg-black bg-opacity-50 py-[40px] px-[40px]",
-              "radix-state-open:animate-fade-in duration-300",
-              !isOpen && "bg-opacity-0"
-            )}
-          >
-            <Dialog.Content
-              onEscapeKeyDown={handleProgrammaticClose}
-              onPointerDownOutside={handleProgrammaticClose}
-              className={cx(
-                "relative z-50 w-4/5 max-w-[1000px] rounded-md bg-white py-6 px-8 shadow-lg dark:bg-dark-300",
-                "duration-300 radix-state-open:animate-slide-up",
-                !isOpen && "translate-y-[10px] opacity-0"
-              )}
-            >
-              <PanelHeaderIssue
-                id={issue?.id || "Create new issue"}
-                deleteDisabled={
-                  userIsNotReporter ||
-                  defaultIssuesIds.includes(issue?.id || "")
-                }
-              />
-              <Form method="post" onSubmit={handleFormSumbit} ref={formRef}>
-                <div className="grid grid-cols-5 gap-16">
-                  <section className="col-span-3">
-                    <Dialog.Title className="my-5 -ml-3">
+    <div className='z-[150]'>
+
+      <PanelHeaderIssue
+        id={issue?.id || 'Create new issue'}
+        deleteDisabled={
+          userIsNotReporter || defaultIssuesIds.includes(issue?.id || '')
+        }
+      />
+      <Form method="post" onSubmit={handleFormSumbit} ref={formRef}>
+        <div className="grid grid-cols-5 gap-16">
+          <section className="col-span-3">
+            <button onClick={handleProgrammaticSubmit}>Save</button>
+            {/* <Dialog.Title className="my-5 -ml-3">
                       <Title
                         initTitle={issue?.name || ""}
                         readOnly={userIsNotReporter}
                         error={actionData?.errors?.name}
                       />
-                    </Dialog.Title>
-                    <p className="font-primary-black text-font-main dark:text-font-main-dark">
-                      Description
-                    </p>
-                    <div className="-ml-3">
-                      <Description
-                        initDescription={issue?.description || ""}
-                        readOnly={userIsNotReporter}
-                      />
-                    </div>
-                    <div className="mt-6">
-                      <p className="font-primary-black text-font-main dark:text-font-main-dark">
-                        Comments
-                      </p>
-                      <div>
-                        <CreateComment addComment={addComment} />
-                      </div>
-                      <ul className="mt-8 space-y-6">
-                        {comments.map((comment) => (
-                          <li key={comment.id}>
-                            <ViewComment
-                              comment={comment}
-                              removeComment={removeComment}
-                            />
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </section>
-                  <section className="col-span-2 space-y-10 dark:text-font-light-dark">
-                    <div>
-                      <p className="mb-1">Status</p>
-                      <SelectStatus
-                        initStatus={issue?.categoryType || initStatus}
-                      />
-                    </div>
-                    <div>
-                      <p className="mb-1">Priority</p>
-                      <SelectPriority
-                        initPriority={issue?.priority.id || "low"}
-                      />
-                    </div>
-                    <div>
-                      <p className="mb-1">Asignee</p>
-                      <SelectAsignee initAsignee={issue?.asignee || user} />
-                    </div>
-                    <div>
-                      <p className="mb-1">Reporter</p>
-                      <div className="mt-1 flex w-fit items-center gap-2 rounded-full bg-grey-300 py-1 pl-1 pr-3.5 pb-1 dark:bg-dark-500">
-                        <UserAvatar {...reporter} />
-                        <input
-                          type="hidden"
-                          name="reporter"
-                          value={reporter.id}
-                        />
-                        <p className="m-0">{reporter.name}</p>
-                      </div>
-                    </div>
-                    <div>
-                      <CreatedUpdatdAt issue={issue} />
-                    </div>
-                  </section>
-                </div>
-                <div className="mt-6 grid grid-cols-3 items-end">
-                  <span className="font-primary-light text-2xs text-font-light text-opacity-80 dark:text-font-light-dark">
-                    Press <Kbd>Shift</Kbd> + <Kbd>S</Kbd> to accept
-                  </span>
-                  <button
-                    type="submit"
-                    className="flex w-fit cursor-pointer items-center gap-4 justify-self-center rounded border-none bg-primary-main py-2 px-8 font-primary-bold text-lg text-white enabled:hover:bg-primary-main-hover disabled:cursor-not-allowed disabled:opacity-60"
-                    disabled={transition.state !== "idle"}
-                    aria-label="Accept changes"
-                  >
-                    {transition.state !== "idle" ? (
-                      <>
-                        Submmiting
-                        <Spinner />
-                      </>
-                    ) : (
-                      "Accept"
-                    )}
-                  </button>
-                  <span className="justify-self-end font-primary-light text-2xs text-font-light text-opacity-80 dark:text-font-light-dark">
-                    Press <Kbd>Esc</Kbd> to close
-                  </span>
-                </div>
-              </Form>
-            </Dialog.Content>
-          </Dialog.Overlay>
-        </Dialog.Portal>
-      </Dialog.Root>
-      {/* To avoid hydration issues because a missmatch with the server*/}
-      <div
-        ref={setPortalContainer}
-        className="fixed top-0 left-0 w-full h-full z-50"
-      />
-    </>
+                    </Dialog.Title> */}
+            <p className="font-primary-black text-font-main dark:text-font-main-dark">
+              Description
+            </p>
+            <div className="-ml-3">
+              <Description
+                initDescription={issue?.description || ''}
+                readOnly={userIsNotReporter}
+              />
+            </div>
+            <div className="mt-6">
+              <p className="font-primary-black text-font-main dark:text-font-main-dark">
+                Comments
+              </p>
+              <div>
+                <CreateComment addComment={addComment} user={user} />
+              </div>
+              <ul className="mt-8 space-y-6">
+                {comments.map((comment) => (
+                  <li key={comment.id}>
+                    <ViewComment
+                      comment={comment}
+                      removeComment={removeComment}
+                    />
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </section>
+          <section className="col-span-2 space-y-10 dark:text-font-light-dark">
+            <div>
+              <p className="mb-1">Status</p>
+              <SelectStatus initStatus={issue?.categoryType || initStatus} />
+            </div>
+            <div>
+              <p className="mb-1">Priority</p>
+              <SelectPriority initPriority={issue?.priority.id || 'low'} />
+            </div>
+            <div>
+              <p className="mb-1">Asignee</p>
+              <SelectAsignee initAsignee={issue?.asignee || user} />
+            </div>
+            <div>
+              <p className="mb-1">Reporter</p>
+              <div className="mt-1 flex w-fit items-center gap-2 rounded-full bg-grey-300 py-1 pl-1 pr-3.5 pb-1 dark:bg-dark-500">
+                <UserAvatar {...reporter} />
+                <input type="hidden" name="reporter" value={reporter.id} />
+                <p className="m-0">{reporter.name}</p>
+              </div>
+            </div>
+            <div>
+              <CreatedUpdatdAt issue={issue} user={user} />
+            </div>
+          </section>
+        </div>
+        <div className="mt-6 grid grid-cols-3 items-end">
+          <span className="font-primary-light text-2xs text-font-light text-opacity-80 dark:text-font-light-dark">
+            Press <Kbd>Shift</Kbd> + <Kbd>S</Kbd> to accept
+          </span>
+          <button
+            type="submit"
+            className="flex w-fit cursor-pointer items-center gap-4 justify-self-center rounded border-none bg-primary-main py-2 px-8 font-primary-bold text-lg text-white enabled:hover:bg-primary-main-hover disabled:cursor-not-allowed disabled:opacity-60"
+            disabled={transition.state !== 'idle'}
+            aria-label="Accept changes"
+          >
+            {transition.state !== 'idle' ? (
+              <>
+                Submmiting
+                <Spinner />
+              </>
+            ) : (
+              'Accept'
+            )}
+          </button>
+          <span className="justify-self-end font-primary-light text-2xs text-font-light text-opacity-80 dark:text-font-light-dark">
+            Press <Kbd>Esc</Kbd> to close
+          </span>
+        </div>
+      </Form>
+    </div>
   );
 };
 
 interface Props {
   issue?: Issue;
+  user: User;
 }
 
 const CreatedUpdatdAt = ({ issue }: Props): JSX.Element => {
   const values = [
-    { label: "Created at:", value: issue?.createdAt },
-    { label: "Updated at:", value: issue?.updatedAt },
+    { label: 'Created at:', value: issue?.createdAt },
+    { label: 'Updated at:', value: issue?.updatedAt }
   ];
 
   return (
@@ -265,7 +233,7 @@ const CreatedUpdatdAt = ({ issue }: Props): JSX.Element => {
             </td>
             <td>
               <p className="mb-2 text-white">
-                {value ? formatDateTime(value) : "Just now"}
+                {value ? formatDateTime(value) : 'Just now'}
               </p>
             </td>
           </tr>

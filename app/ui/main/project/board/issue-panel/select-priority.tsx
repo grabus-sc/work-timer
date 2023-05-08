@@ -1,14 +1,14 @@
 import { useState } from "react";
 import * as Select from "@radix-ui/react-select";
-import { PriorityId, prioritiesMock } from "@domain/priority";
-import { PriorityIcon } from "@app/components/priority-icon";
+import { PriorityId, prioritiesMock } from "domain/priority";
+import { PriorityIcon } from "app/components/priority-icon";
 import {
   SelectTrigger,
   SelectTriggerIcon,
   SelectContent,
   SelectItem,
   SelectItemIndicator,
-} from "@app/components/select";
+} from "app/components/select";
 
 export const SelectPriority = ({ initPriority }: Props): JSX.Element => {
   const [selectValue, setSelectValue] = useState<PriorityId>(initPriority);

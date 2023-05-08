@@ -2,7 +2,7 @@ import React from "react";
 import cx from "classix";
 import { BiSearch } from "react-icons/bi";
 import { IoCloseOutline } from "react-icons/io5";
-import { useProjectStore } from "@app/ui/main/project";
+import { useProjectStore } from "app/ui/main/project";
 
 export const Search = (): JSX.Element => {
   const { search, setSearch } = useProjectStore();

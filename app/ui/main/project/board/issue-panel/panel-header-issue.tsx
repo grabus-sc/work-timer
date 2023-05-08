@@ -1,10 +1,10 @@
 import { Form, Link, useLocation } from "@remix-run/react";
-import * as AlertDialog from "@app/components/alert-dialog";
+import * as AlertDialog from "app/components/alert-dialog";
 import cx from "classix";
 import { MdDeleteOutline } from "react-icons/md";
 import { IoCloseOutline } from "react-icons/io5";
-import { IssueId } from "@domain/issue";
-import { TaskIcon } from "@app/components/icons";
+import { IssueId } from "domain/issue";
+import { TaskIcon } from "app/components/icons";
 
 export const PanelHeaderIssue = ({
   id,

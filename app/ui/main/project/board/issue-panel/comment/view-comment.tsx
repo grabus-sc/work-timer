@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { useFetcher } from "@remix-run/react";
 import cx from "classix";
-import { Comment, CommentId } from "@domain/comment";
-import { useUserStore } from "@app/store/user.store";
-import { UserAvatar } from "@app/components/user-avatar";
+import { Comment, CommentId } from "domain/comment";
+import { useUserStore } from "app/store/user.store";
+import { UserAvatar } from "app/components/user-avatar";
 import { EditBox } from "./edit-box";
-import { formatDateTime } from "@utils/formatDateTime";
+import { formatDateTime } from "utils/formatDateTime";
 
 export const ViewComment = ({
   comment,

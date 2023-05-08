@@ -2,7 +2,7 @@ import { Link } from "@remix-run/react";
 import cx from "classix";
 import { HiQuestionMarkCircle } from "react-icons/hi";
 import { AiFillGithub } from "react-icons/ai";
-import { Tooltip } from "@app/components/tooltip";
+import { Tooltip } from "app/components/tooltip";
 import { SelctTheme } from "./select-theme";
 import { UserProfile } from "./user-profile";
 

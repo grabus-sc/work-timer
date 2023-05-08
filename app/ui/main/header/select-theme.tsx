@@ -10,8 +10,8 @@ import {
   isValidPreference,
   getSystemTheme,
   DEFAULT_THEME,
-} from "@app/store/theme.store";
-import { Tooltip } from "@app/components/tooltip";
+} from "app/store/theme.store";
+import { Tooltip } from "app/components/tooltip";
 
 export const SelctTheme = (): JSX.Element => {
   const { theme, setTheme, preference } = useTheme();

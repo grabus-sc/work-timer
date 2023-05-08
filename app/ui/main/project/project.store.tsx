@@ -5,7 +5,7 @@ import {
   Dispatch,
   SetStateAction,
 } from "react";
-import { Project } from "@domain/project";
+import { Project } from "domain/project";
 
 interface ProjectStore {
   project: Project;

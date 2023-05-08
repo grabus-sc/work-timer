@@ -1,15 +1,15 @@
 import { useState } from "react";
 import * as Select from "@radix-ui/react-select";
 import cx from "classix";
-import { CategoryId, CategoryType } from "@domain/category";
-import { useProjectStore } from "@app/ui/main/project";
+import { CategoryId, CategoryType } from "domain/category";
+import { useProjectStore } from "app/ui/main/project";
 import {
   SelectTrigger,
   SelectTriggerIcon,
   SelectContent,
   SelectItem,
   SelectItemIndicator,
-} from "@app/components/select";
+} from "app/components/select";
 
 export const SelectStatus = ({ initStatus }: Props): JSX.Element => {
   const projectStore = useProjectStore();

@@ -2,8 +2,8 @@ import { Form } from "@remix-run/react";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { FaPowerOff } from "react-icons/fa";
 import cx from "classix";
-import { useUserStore } from "@app/store/user.store";
-import { UserAvatar } from "@app/components/user-avatar";
+import { useUserStore } from "app/store/user.store";
+import { UserAvatar } from "app/components/user-avatar";
 
 export const UserProfile = (): JSX.Element => {
   const { user } = useUserStore();

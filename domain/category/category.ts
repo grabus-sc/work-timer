@@ -1,4 +1,4 @@
-import { Issue } from "@domain/issue";
+import { Issue } from "domain/issue";
 
 export type CategoryId = string;
 export type CategoryType = typeof categoryTypes[number];

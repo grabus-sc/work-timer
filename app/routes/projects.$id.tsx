@@ -36,7 +36,7 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
     "twitter:image:width": "1457",
     "twitter:image:height": "872",
     "twitter:image:alt": title,
-    "twitter:creator": "@Jack_DanielSG",
+    "twitter:creator": "Jack_DanielSG",
     "twitter:creator:id": "Jack_DanielSG",
   };
 };
@@ -49,9 +49,9 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const url = new URL(request.url);
   const projectId = params.projectId as ProjectId;
 
-  invariant(params.projectId, `params.projectId is required`);
+  // invariant(params.projectId, `params.projectId is required`);
 
-  const projectSummary = await getProjectSummary(projectId);
+  const projectSummary = await getProjectSummary("89ffe3c2-804d-4698-8525-eea9ee01de6e");
 
   if (!projectSummary) {
     throw new Response("Not Found", {
